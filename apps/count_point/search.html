@@ -1,0 +1,51 @@
+{% extends "templates/layouts/default.html" %}
+
+{% block style %}
+.cuttext{
+    display: block;
+    width: 60px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    border: 1px solid transparent;
+}
+{% endblock %}
+
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block window %}
+<div id="chart"><!-- 图表 --></div>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+    </div>
+</div>
+
+<!-- 数据表格 -->
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">积分搜索结果：{{ total }}积分, {{ user }}用户， 平均赚取(ARPU)：{{ avg }}, 成本：{{cost}}, 回报比(ROI): {{ roi }}</h3>
+                <div class="box-tools">
+                    <div class="pull-right">
+                        <a class="btn btn-danger" id="search">重新搜索</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'count_point/modal.html' %}
+{% endblock %}
+
+{% block page_javascript %}
+<script>
+    // 搜索
+    $("#search").click(function() {
+        $("#modal_search").modal('show');
+    });
+</script>
+{% endblock %}

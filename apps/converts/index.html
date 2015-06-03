@@ -1,0 +1,89 @@
+{% extends "templates/layouts/default.html" %}
+
+{% block style %}
+.cuttext{
+    display: block;
+    width: 60px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    border: 1px solid transparent;
+}
+{% endblock %}
+
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block window %}
+<div id="chart"><!-- 图表 --></div>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+    </div>
+</div>
+
+<!-- 数据表格 -->
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">商品订单列表（{% ifequal status 0 %}待{% else %}已{% endifequal %}处理: {{ total }} 单 成本 {{ cost }}）</h3>
+                <div class="box-tools">
+                    <form role="form" class="form-inline p0 mt24 tar pull-right" action="" method="get">
+                        <div class="form-group">
+                            <div class="btn-group">
+                                {% ifequal status 0 %}
+                                <a href="?filter=0" class="btn btn-sm btn-success" disabled="disabled">审核</a>
+                                {% else %}
+                                <a href="?filter=0" class="btn btn-sm btn-default">审核</a>
+                                {% endifequal %}
+                                {% ifequal status 3 %}
+                                <a href="?filter=3" class="btn btn-sm btn-success" disabled="disabled">延缓</a>
+                                {% else %}
+                                <a href="?filter=3" class="btn btn-sm btn-default">延缓</a>
+                                {% endifequal %}
+                                {% ifequal status 1 %}
+                                <a href="?filter=1" class="btn btn-sm btn-success" disabled="disabled">兑换</a>
+                                {% else %}
+                                <a href="?filter=1" class="btn btn-sm btn-default">兑换</a>
+                                {% endifequal %}
+                                {% ifequal status 2 %}
+                                <a href="?filter=2" class="btn btn-sm btn-success" disabled="disabled">忽略</a>
+                                {% else %}
+                                <a href="?filter=2" class="btn btn-sm btn-default">忽略</a>
+                                {% endifequal %}
+                                {% ifequal status -1 %}
+                                <a href="?filter=-1" class="btn btn-sm btn-success" disabled="disabled">全部</a>
+                                {% else %}
+                                <a href="?filter=-1" class="btn btn-sm btn-default">全部</a>
+                                {% endifequal %}
+                            </div>
+                        </div>&nbsp;
+                        <a class="btn btn-danger" id="search">搜索</a>
+                    </form>
+                </div>
+            </div>
+            <div class="box-body">
+                {% include 'converts/index_body.html' %}
+                <ul class="pagination mt12">
+                    {% if datas.has_previous %}
+                        <li><a href="/converts/?filter={{ status }}&page=1">&laquo;</a></li>
+                        <li><a href="/converts/?filter={{ status }}&page={{ datas.previous_page_number }}">{{ datas.previous_page_number }}</a></li>
+                    {% endif %}
+                    <li class="active"><a href="">{{ datas.number }}</a></li>
+                    {% if datas.has_next %}
+                        <li><a href="/converts/?filter={{ status }}&page={{ datas.next_page_number }}">{{ datas.next_page_number }}</a></li>
+                        <li><a href="/converts/?filter={{ status }}&page={{ datas.paginator.num_pages }}">&raquo;</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'converts/modal.html' %}
+{% endblock %}
+
+{% block page_javascript %}
+{% include 'converts/converts_script.html' %}
+{% endblock %}

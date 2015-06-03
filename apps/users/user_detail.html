@@ -1,0 +1,447 @@
+{% extends "templates/layouts/default.html" %}
+
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h2 class="col-md-4 p0"></h2>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title"><i class="glyphicon glyphicon-user"></i>&nbsp;&nbsp;用户信息列表</h3>
+            </div>
+            <div class="box-body">
+                <table class="table table-striped table-bordered mt24">
+                    <caption></caption>
+                    <thead>
+                        <tr>
+                            <th>UID</th>
+                            <th>头像</th>
+                            <th>来源</th>
+                            <th>scopeid</th>
+                            <th>系统</th>
+                            <th>语言</th>
+                            <th>版本号</th>
+                            <th>appType</th>
+                            <th>怀疑作弊</th>
+                            <th>name</th>
+                            <th>mail</th>
+                            <th>当前积分</th>
+                            <th>兑换积分</th>
+                            <th>邀请积分</th>
+                            <th>受邀于</th>
+                            <th>邀请人数</th>
+                            <th>用户创建日期</th>
+                            <th>最近登陆时间</th>
+                            <th>token</th>
+                            <th>最近登陆IP</th>
+                            <th>IP地址</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <a href="/users/detail/{{ uid }}/" >{{ uid }}</a>
+                            </td>
+                            <td>
+                                <img src="http://www.gofree.hk/user/{{ user.scopeid }}.jpg" alt="{{ user.scopeid }}头像+" />
+                            </td>
+                            <td>
+                                {%if user.ad_from == 2 %}
+                                    <span class="label label-info">Tapjoy</span>
+                                {% endif %}
+                            </td>
+                            <td>{{user.scopeid}}</td>
+                            <td>
+                                {% if count == 3 %}
+                                    <span class="label label-info">Both</span>
+                                {% elif user.platform == "2" %}
+                                    <span class="label label-danger">iOS</span>
+                                {% elif user.platform == "1" %}
+                                    <span class="label label-success">Android</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if user.en == 1 %}
+                                    <span class="label label-info">EN</span>
+                                {% elif user.en == 0 %}
+                                    <span class="label label-warning">CH</span>
+                                {% endif %}
+                            </td>
+                            <td>{{user.version}}</td>
+                            <td class="g9">
+                                {% if user.appType == 0 %}
+                                    <span class="label label-danger">免费红利</span>
+                                {% else %}
+                                    <span class="label label-success">卡卡赚</span>
+                                {% endif %}</td>
+                            <td class="g9">
+                                {% if user.wonder == 1 %}
+                                    <span class="label label-danger">是</span>
+                                {% else %}
+                                    <span class="label label-success">否</span>
+                                {% endif %}</td>
+                          <!--
+                            <td>{{ user.phone }}</td>
+                            <td>{{ user.alipay }}</td>
+                            -->
+                            <td>{{ user.name }}</td>
+                            <td>{{ user.mail }}</td>
+                            <td class="hl tar">
+                                {% if user.points %}
+                                    <a href="/users/detail/{{ uid }}/" >{{ user.points }}</a>
+                                {% else %}
+                                    {{ user.points }}
+                                {% endif %}
+                            </td>
+                            <td class="tar">
+                                {% if user.ex_points %}
+                                    <a href="/users/exchange/{{ uid }}/" class="l">{{ user.ex_points }}</a>
+                                {% else %}
+                                    {{ user.ex_points }}
+                                {% endif %}
+                            </td>
+                            <td class="tar">{{ user.invite_points }}</td>
+                            <!--
+                            <td class="tac">{{ user.grade }}</td>
+                            <td class="tac">{{ user.sign_days }}</td>
+                            -->
+                            <td class="g9"><a href="/users/search/?invited_code={{ user.invited_by }}">{{ user.invited_by }}</td>
+                            <td>{{ user.invites }}</td>
+                            <td class="g9">{{ user.create_at|date:"Y-m-d H:i:s" }}</td>
+                            <td class="g9">{{ user.last_login|date:"Y-m-d H:i:s" }}</td>
+                            <td class="g9">{{ user.token }}</td>
+                            <td>{{user.ip}}</td>
+                            <td>{{ip}}</td>
+                            <td>
+                                <a href="/users/detail/edit/?uid={{ uid }}" target="blank" class="l">编辑</a>
+                                <a href="/users/detail/black/?uid={{ uid }}" class="l btn-black" data-uid="{{ uid }}">/黑名单</a>
+                                <a href="/users/detail/blank/?uid={{ uid }}" class="l btn-blank" data-uid="{{ uid }}">/变白</a>
+                                <a href="/users/wonder/?gid={{ uid }}" class="l btn-wonder" data-gid="{{ uid }}">/怀疑</a>
+                                <a href="/users/nowonder/?gid={{ uid }}" class="l btn-nowonder" data-gid="{{ uid }}">/取消</a>
+                           </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 用户设备信息 -->
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">
+                    <i class="glyphicon glyphicon-phone"></i>&nbsp;&nbsp;用户设备信息
+                </h3>
+            </div>
+            <FORM METHOD=get ACTION="http://www.ip138.com/ips1388.asp" name="ipform" style="float:right" target="_blank">
+            <tr><td align="right">IP查询：<input type="text" name="ip" size="16"> 
+            <input type="submit" value="查询"><INPUT TYPE="hidden" name="action" value="2">
+            </td></tr>  
+            </FORM>
+            <div class="box-body">
+                <table class="table table-striped table-bordered mt24">
+                    <caption></caption>
+                    <thead>
+                        <tr>
+                            <th>系统</th>
+                            <th>token</th>
+                            <th>imei</th>
+                            <th>imsi</th>
+                            <th>andid</th>
+                            <th>mac</th>
+                            <th>idfa</th>
+                            <th>idfv</th>
+                            <th>ser</th>
+                            <th>设备登陆IP</th>
+                            <th>作弊嫌疑</th>
+                            <th>作弊类型</th>
+                       </tr>
+                    </thead>
+                    <tbody>
+                    {% for u in userdevices %}
+                        <tr>
+                            <td>
+                                {% if u.ei %}
+                                    <span class="label label-success">Android</span>
+                                {% else %}
+                                    <span class="label label-danger">iOS</span>
+                                {% endif %}
+                            </td>
+                            <td class="g9">{{ u.fingerprinting }}</td>
+                            <td>{{ u.ei }}</td>
+                            <td>{{ u.si}}</td>
+                            <td>{{ u.andid }}</td>
+                            <td>{{ u.mac }}</td>
+                            <td>{{ u.idfa }}</td>
+                            <td>{{ u.idfv}}</td>
+                            <td>{{ u.ser }}</td>
+                            <td><!--<a href="http://www.ip138.com/ips1388.asp?ip={{ u.ip }}&action=2">-->
+                                {{ u.ip }}
+                            </td>
+                            <td>
+                                {% if u.cheat %}
+                                    <span class="label label-danger">是</span>
+                                {% else %}
+                                    <span class="label label-success">否</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if u.type == 2 %}
+                                    <span class="label label-success">imei</span>
+                                {% elif u.type == 1 %}
+                                    <span class="label label-danger">ip</span>
+                                {% elif u.type == 3 %}
+                                    <span class="label label-info">idfa</span>
+                                {% elif u.type == 0 %}
+                                    <span class="label label-info">无</span>
+                                {% endif %}
+                            </td>
+                       </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 数据表格 -->
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">
+                    <i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;用户积分记录：<a href="/users/"><font color="blue">{{ uid }}</font></a>
+                </h3>
+            </div>
+            <div class="box-body">
+                <table class="table table-striped table-bordered mt24">
+                    <caption></caption>
+                    <thead>
+                        <tr>
+                            <th>时间</th>
+			    <th>消费前剩余积分</th>
+                            <!--<th>当前积分</th>-->
+                            <th>积分变化</th>
+                            <th>类型</th>
+                            <th>详细</th>
+    
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for d in datas.object_list %}
+                        <tr>
+                            <td class="g9">{{ d.record_time|date:"Y-m-d H:i:s" }}</td>
+                            <td>{{ d.last }}</td>
+                            <td>{{ d.points}}</td>
+                            <td>
+                            {% ifequal d.type 1 %}
+                                <span class="text-success">绑定</span>
+                            {% endifequal %}
+                            {% ifequal d.type 2 %}
+                                <span class="text-warning">分享</span>
+                            {% endifequal %}
+                            {% ifequal d.type 3 %}
+                                <span class="text-info">邀请</span>
+                            {% endifequal %}
+                            {% ifequal d.type 4 %}
+                                <span class="text-primary">签到</span>
+                            {% endifequal %}
+                            {% ifequal d.type 5 %}
+                                <span class="text-info">兑换</span>
+                            {% endifequal %}
+                            {% ifequal d.type 6 %}
+                                <span class="text-danger">任务</span>
+                            {% endifequal %}
+                            {% ifequal d.type 7 %}
+                                <span class="text-danger">兑吧兑换失败</span>
+                            {% endifequal %}
+                            {% ifequal d.type 8 %}
+                                <span class="text-danger">红利点赞</span>
+                            {% endifequal %}
+                            {% ifequal d.type 9 %}
+                                <span class="text-success">积分修改</span>
+                            {% endifequal %}
+                            {% ifequal d.type 11 %}
+                                <span class="text-info">卡卡点赞</span>
+                            {% endifequal %}
+                            {% ifequal d.type 12 %}
+                                <span class="text-info">每日奖励</span>
+                            {% endifequal %}
+                            {% ifequal d.type 13 %}
+                                <span class="text-info">积分抽奖</span>
+                            {% endifequal %}
+                            {% ifequal d.type 14 %}
+                                <span class="text-info">红包</span>
+                            {% endifequal %}
+                            {% ifequal d.type 15 %}
+                                <span class="text-info">忽略兑换</span>
+                            {% endifequal %}
+                        </td>
+                            <td>{{ d.note }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <ul class="pagination mt12">
+                    {% if datas.has_previous %}
+                        <li><a href="/users/detail/{{ uid }}/">&laquo;</a></li>
+                        <li><a href="/users/detail/{{ uid }}/page/{{ datas.previous_page_number }}/">{{ datas.previous_page_number }}</a></li>
+                    {% endif %}
+                    <li class="active"><a href="">{{ datas.number}}</a></li>
+                    {% if datas.has_next %}
+                        <li><a href="/users/detail/{{ uid }}/page/{{ datas.next_page_number }}/">{{ datas.next_page_number }}</a></li>
+                        <li><a href="/users/detail/{{ uid }}/page/{{ datas.paginator.num_pages }}/">&raquo;</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modal4" class="modal fade">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p>是否一键黑名单？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button id="black_comfirm" type="button" class="btn btn-success">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modal3" class="modal fade">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p>是否一键白名单？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button id="blank_comfirm" type="button" class="btn btn-success">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modal1" class="modal fade">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p>是否取消怀疑？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button id="nowonder_comfirm" type="button" class="btn btn-success">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modal2" class="modal fade">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p>是否怀疑？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button id="wonder_comfirm" type="button" class="btn btn-success">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block page_javascript %}
+<script>
+    $(".table").on('click', '.btn-black', function() {
+        $("#modal4").modal('show');
+        localStorage.setItem("black_uid", $(this).data('uid'));
+        return false;
+    });
+    $("#black_comfirm").click(function() {
+        var uid = parseInt(localStorage.getItem("black_uid"));
+
+        $.get("/users/detail/black/?uid="+ uid, function(data) {
+            $("#modal4").modal('hide');
+            alert('一键黑名单成功!');
+            location.reload()
+        });
+    });
+    $(".table").on('click', '.btn-blank', function() {
+        $("#modal3").modal('show');
+        localStorage.setItem("blank_uid", $(this).data('uid'));
+        return false;
+    });
+    $("#blank_comfirm").click(function() {
+        var uid = parseInt(localStorage.getItem("blank_uid"));
+
+        $.get("/users/detail/blank/?uid="+ uid, function(data) {
+            $("#modal4").modal('hide');
+            alert('一键白名单成功!');
+        location.reload()
+        });
+    });
+
+    $(".table").on('click', '.btn-wonder', function() {
+        $("#modal2").modal('show');
+        localStorage.setItem("convert_gid", $(this).data('gid'));
+        return false;
+    });
+
+    $("#wonder_comfirm").click(function() {
+        var gid = parseInt(localStorage.getItem("convert_gid"));
+
+        $.get("/users/wonder/?gid="+ gid, function(data) {
+            $("#modal2").modal('hide');
+            alert('怀疑成功!');
+        location.reload();
+        });
+    });
+
+    $(".table").on('click', '.btn-nowonder', function() {
+        $("#modal1").modal('show');
+        localStorage.setItem("convert_gid", $(this).data('gid'));
+        return false;
+    });
+
+    $("#nowonder_comfirm").click(function() {
+        var gid = parseInt(localStorage.getItem("convert_gid"));
+
+        $.get("/users/nowonder/?gid="+ gid, function(data) {
+            $("#modal1").modal('hide');
+            alert('取消成功!');
+        location.reload();
+        });
+    });
+
+</script>
+{% endblock %}

@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+    <meta charset="utf-8" />
+    <title>爱赚 - 后台系统</title>
+    <link rel="stylesheet" href="/assets/libs/bootstrap/3.1.1/bootstrap.css"></link>
+    <link rel="stylesheet" href="/assets/global/src/global.css"></link>
+    {% block page_css %}{% endblock %}
+</html>
+<body id="{% block page_id %}{% endblock %}">
+    <div class="content" data-page="{{ page_tag }}">
+        <!-- =header -->
+        <header class="navbar navbar-inverse navbar-static-top m0">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/">爱赚后台</a>
+                </div>
+            </div>
+        </header>
+
+        <!-- =chart -->
+        <div class="window {% block window_class %}{% endblock %}">
+            <div class="container">
+                {% block window %}{% endblock %}
+            </div>
+        </div>
+
+        <!-- =content -->
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    <!-- =footer -->
+    <footer class="footer">
+        <div class="container">
+            <p class="copyright">Copyright © 2014 You1000.com. All Rights Reserved. 版权所有</p>
+        </div>
+    </footer>
+
+    <script src="/assets/libs/jquery/jquery/2.1.0/jquery.min.js"></script>
+    <script src="/assets/libs/bootstrap/3.1.1/bootstrap.min.js"></script>
+    {% block page_javascript %}{% endblock %}
+</body>
+</html>

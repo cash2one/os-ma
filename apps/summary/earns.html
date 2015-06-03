@@ -1,0 +1,201 @@
+{% extends "templates/layouts/default.html" %}
+
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block content %}
+<!-- 数据表格 -->
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">近期赚取数据统计</h3>
+                <div class="box-tools">
+                    <form role="form" class="form-inline p0 mt24 tar pull-right" action="" method="get">
+                        <div class="form-group">
+                            <label class="sr-only" for="dateTime">查询开始日期</label>
+                            <input type="date" class="form-control" id="dateTime" name="date" value="{{ query_date }}" placeholder="查询开始日期" />
+                        </div>&nbsp;
+                        <div class="form-group">
+                            <label class="sr-only" for="dateTime">查询结束日期</label>
+                            <input type="date" class="form-control" id="enddateTime" name="enddate" value="{{ query_enddate }}" placeholder="查询结束日期" />
+                        </div>&nbsp;
+                        <button type="submit" class="btn btn-info">查询</button>
+                    </form>
+                        <!--<button class="btn btn-success" id="orderby">排序</button>-->
+
+                    </div>
+                </div>
+                <!--{% include 'summary/query_form.html' %}-->
+            </div>
+            <div class="box-body">
+                <!-- main chart -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="box box-primary">
+                            <div class="box-header">
+                                <h3 class="box-title">各平台下载数</h3>
+                            </div>
+                            <div class="box-body chart-responsive">
+                                <div class="chart" id="earns_down" style="height: 300px;"></div>
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="col-md-6">
+                        <div class="box box-primary">
+                            <div class="box-header">
+                                <h3 class="box-title">各平台赚取效果</h3>
+                            </div>
+                            <div class="box-body chart-responsive">
+                                <div class="chart" id="earns_earns" style="height: 300px;"></div>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+                <table class="table table-striped table-bordered mt24">
+                    <thead>
+                        <tr>
+                            <th rowspan=2 class="text-center">日期</th>
+                            <th colspan=2 class="text-center">总数据</th>
+                            <th colspan=2 class="text-center">Youmi</th>
+                            <th colspan=2 class="text-center">Supersonic</th>
+                            <th colspan=2 class="text-center">Aarki</th>
+                            <th colspan=2 class="text-center">fyber</th>
+                            <th colspan=2 class="text-center">新用户</th>
+                            <th colspan=2 class="text-center">分享</th>
+                            <th colspan=2 class="text-center">邀请</th>
+                            <th colspan=2 class="text-center">签到</th>
+                            <th colspan=2 class="text-center">红利点赞</th>
+                            <th colspan=2 class="text-center">卡卡点赞</th>
+                            <th colspan=2 class="text-center">活動贈送</th>
+                        </tr>
+                        <tr>
+                            <td>下载数</td>
+                            <td>赚取额</td>
+                            <td>下载数</td>
+                            <td>赚取额</td>
+                            <td>下载数</td>
+                            <td>赚取额</td>
+                            <td>下载数</td>
+                            <td>赚取额</td>
+                            <td>下载数</td>
+                            <td>赚取额</td>
+                            <td>用户数</td>
+                            <td>赚取额</td>
+                            <td>分享数</td>
+                            <td>赚取额</td>
+                            <td>邀请数</td>
+                            <td>赚取额</td>
+                            <td>签到数</td>
+                            <td>赚取额</td>
+                            <td>点赞数</td>
+                            <td>赚取额</td>
+                            <td>点赞数</td>
+                            <td>赚取额</td>
+                            <td>次數</td>
+                            <td>贈送額</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for d in datas %}
+                        <tr>
+                            <td>{{ d.time|date:"Y-m-d" }}</td>
+                            <td class="text-muted">{{ d.total.down }}</td>
+                            <td>{{ d.total.earns }}</td>
+                            <td class="text-muted">{{ d.youmi.down}}</td>
+                            <td>{{ d.youmi.earns }}</td>
+                            <td class="text-muted">{{ d.supersonic.down}}</td>
+                            <td>{{ d.supersonic.earns }}</td>
+                            <td class="text-muted">{{ d.aarki.down}}</td>
+                            <td>{{ d.aarki.earns }}</td>
+                            <td class="text-muted">{{ d.fyber.down}}</td>
+                            <td>{{ d.fyber.earns }}</td>
+                            <td class="text-muted">{{ d.newuser.down }}</td>
+                            <td>{{ d.newuser.earns }}</td>
+                            <td class="text-muted">{{ d.share.down }}</td>
+                            <td>{{ d.share.earns }}</td>
+                            <td class="text-muted">{{ d.invite.down }}</td>
+                            <td>{{ d.invite.earns }}</td>
+                            <td class="text-muted">{{ d.sign.down }}</td>
+                            <td>{{ d.sign.earns }}</td>
+                            <td class="text-muted">{{ d.like.down }}</td>
+                            <td>{{ d.like.earns }}</td>
+                            <td class="text-muted">{{ d.star.down }}</td>
+                            <td>{{ d.star.earns }}</td>
+                            <td class="text-muted">{{ d.earnPoint.down }}</td>
+                            <td>{{ d.earnPoint.earns }}</td>
+                       </tr>
+                    {% endfor %}
+                        <tr class="text-primary">
+                            <td class="text-center">累积数据</td>
+                            <td>{{ total.total.down }}</td>
+                            <td>{{ total.total.earns }}</td>
+                            <td>{{ total.youmi.down }}</td>
+                            <td>{{ total.youmi.earns}}</td>
+                            <td>{{ total.supersonic.down }}</td>
+                            <td>{{ total.supersonic.earns}}</td>
+                            <td>{{ total.aarki.down }}</td>
+                            <td>{{ total.aarki.earns}}</td>
+                            <td>{{ total.fyber.down }}</td>
+                            <td>{{ total.fyber.earns}}</td>
+                            <td>{{ total.newuser.down }}</td>
+                            <td>{{ total.newuser.earns }}</td>
+                            <td>{{ total.share.down }}</td>
+                            <td>{{ total.share.earns }}</td>
+                            <td>{{ total.invite.down }}</td>
+                            <td>{{ total.invite.earns }}</td>
+                            <td>{{ total.sign.down }}</td>
+                            <td>{{ total.sign.earns }}</td>
+                            <td>{{ total.like.down }}</td>
+                            <td>{{ total.like.earns }}</td>
+                            <td>{{ total.star.down }}</td>
+                            <td>{{ total.star.earns }}</td>
+                            <td>{{ total.earnPoint.down }}</td>
+                            <td>{{ total.earnPoint.earns }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block page_javascript %}
+<script type="text/javascript" charset="utf-8">
+   $(function() {
+        "use strict";
+
+        // 下载数 
+        var earns_down_chart = new Morris.Line({
+            element: 'earns_down',
+            resize: true,
+            data: [ {% for d in datas %}
+                {y: '{{ d.time|date:"Y-m-d" }}', item1: {{ d.total.down }}, item2: {{ d.youmi.down}} , item3: {{ d.supersonic.down}}, item4: {{ d.aarki.down}},
+                item5: {{ d.fyber.down}} , item6: {{ d.newuser.down}}, item7: {{ d.share.down}}, item8: {{ d.invite.down}}, item9: {{ d.sign.down}}, 
+                item10: {{d.like.down}}, item11: {{d.star.down}}},{% endfor %}
+            ],
+            xkey: 'y',
+            ykeys: ['item1', 'item2',  'item3', 'item4', 'item5', 'item6', 'item7', 'item8', 'item9', 'item10', 'item11'],
+            labels: ['总数据', 'youmi', 'supersonic', 'aarki', 'fyber', '新用户', '分享', '邀请', '签到', '红利点赞', '卡卡点赞'],
+            lineColors: ['#3c8dbc', '#a0d0e0', '#00c0ef', '#777777', '#428bca', '#3c763d', '#3300FF', '#33CC33', '#6699FF', '#3366FF', '#3c8dbc'],
+            hideHover: 'auto'
+        });
+
+        // 赚取效果
+        var earns_earns_chart = new Morris.Line({
+            element: 'earns_earns',
+            resize: true,
+            data: [ {% for d in datas %}
+            {y: '{{ d.time|date:"Y-m-d" }}', item1: {{ d.total.earns }}, item2: {{ d.youmi.earns }}, item3: {{ d.supersonic.earns }}, item4: {{ d.aarki.earns }},
+            item5: {{ d.fyber.earns }}, item6: {{ d.newuser.earns }}, item7: {{ d.share.earns }}, item8: {{ d.invite.earns }}, item9: {{ d.sign.earns }},
+            item10: {{d.like.earns}}, item11: {{d.star.down}}},{% endfor %}
+            ],
+            xkey: 'y',
+            ykeys: ['item1', 'item2',  'item3', 'item4', 'item5', 'item6', 'item7', 'item8', 'item9', 'item10', 'item11'],
+            labels: ['总数据', 'youmi', 'supersonic', 'aarki', 'fyber', '新用户', '分享', '邀请', '签到', '红利点赞', '卡卡点赞'],
+            lineColors: ['#3c8dbc', '#a0d0e0', '#00c0ef', '#777777', '#428bca', '#3c763d', '#3300FF', '#33CC33', '#6699FF', '#3366FF', '#3c8dbc'],
+            hideHover: 'auto'
+        });
+   });
+</script>
+{% endblock %}

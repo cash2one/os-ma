@@ -1,0 +1,75 @@
+{% extends "templates/layouts/default.html" %}
+
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="col-md-8 col-md-offset-2">
+
+        <form class="form-horizontal mt24" action="." method="post">
+            {% if succ %}
+                <div class="alert alert-success alert-dimissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    恭喜小伙伴，修改用户积分成功！
+                </div>
+            {% endif %}
+
+            {% if errors %}
+                <div class="alert alert-danger alert-dimissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <ul>
+                        {% for error in errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            <input type="hidden" name="uid" value="{{ datas.uid }}" />
+
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="uid">user：</label>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" value="{{ datas.uid }}" name="uid" readonly="readonly"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="user_points">现有积分：</label>
+                <div class="col-md-2">
+                    <input type="text" class="form-control" value="{{ datas.points }}" name="points" readonly="readonly" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="user_addpoints">增加积分：</label>
+                <div class="col-md-2">
+                    <input type="text" class="form-control" value="{{ datas.addpoints }}" name="addpoints" placeholder="请输入增加用户积分" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="user_note">note：</label>
+                <div class="col-md-2">
+                    <input type="text" class="form-control" value="{{ datas.note }}" name="note" placeholder="请输入备注" />
+                </div>
+            </div>
+            <!--<div class="form-group">
+                <label class="col-md-2 control-label">GooglePlay五星好评：</label>
+                <div class="col-md-6">
+                    <label for="open">
+                        <input type="radio" id="open" name="star_gg" value=1 {% if datas.star_gg %}checked{% endif %}>
+                         是
+                        </label>
+                    <label for="close">
+                        <input type="radio" id="close" name="star_gg" value=0 {% if not datas.star_gg %}checked{% endif %}>
+                         否
+                    </label>
+                </div>
+            </div>-->
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <button type="submit" class="btn btn-info">确认修改</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

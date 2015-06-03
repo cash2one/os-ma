@@ -1,0 +1,167 @@
+{% extends "templates/layouts/default.html" %}
+
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block window %}
+<div id="chart"><!-- 图表 --></div>
+{% endblock %}
+
+{% block content %}
+
+<!-- 数据表格 -->
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">用户任务列表</h3>
+                <div class="box-tools">
+                    <div class="btn-group pull-right">
+                        <!--<button class="btn btn-success" id="orderby">排序</button>-->
+
+                    </div>
+                </div>
+            </div>
+            <div class="box-body">
+                <table class="table table-striped table-bordered mt24">
+                    <caption></caption>
+                    <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>uid</th>
+                            <th>邀请码</th>
+                            <th>邮箱</th>
+                            <th>lineID</th>
+                            <th>任务id</th>
+                            <th>状态</th>
+                            <th>开始时间</th>
+                            <th>修改时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for d in datas.object_list %}
+                        <tr>
+
+                            <td>{{ d.id }}</td>
+                            <td>
+                                <a href="/users/detail/{{ d.uid }}/" >{{ d.uid }}</a>
+                            </td>
+                            <td>{{ d.iv_code }}</td>
+                            <td>{{ d.email }}</td>
+                            <td>{{ d.lineID }}</td>
+                            <td>{{ d.mission_id }}</td>
+                            <td>
+                                {% if d.status == 1 %}
+                                    <span class="label label-success">已报名</span>
+                                {% elif d.status == 2 %}
+                                    <span class="label label-danger">已完成</span>
+                                {% elif d.status == 3 %}
+                                    <span class="label label-warning">已失效</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ d.stime }}</td>
+                            <td>{{ d.change_time }}</td>
+                <td>
+                    <a href="/go_mission/list/edit/?gid={{ d.id }}&uid={{ d.uid}}" target="blank" class="l">发放奖励</a>
+                                <a href="/go_mission/list/online/?gid={{ d.id }}" class="l btn-online" data-gid="{{ d.id }}">/完成</a>
+                                <a href="/go_mission/list/offline/?gid={{ d.id }}" class="l btn-offline" data-gid="{{ d.id }}">/失效</a>
+                </td>
+
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <ul class="pagination mt12">
+                    {% if datas.has_previous %}
+                    <li><a href="/go_mission/list/?page=1&orderby={{ orderby }}&updw={{ updw }}">&laquo;</a></li>
+                        <li><a href="/go_mission/list/?page={{ datas.previous_page_number }}&orderby={{ orderby }}&updw={{ updw }}">{{ datas.previous_page_number }}</a></li>
+                    {% endif %}
+                    <li class="active"><a href="">{{ datas.number}}</a></li>
+                    {% if datas.has_next %}
+                        <li><a href="/go_mission/list/?page={{ datas.next_page_number }}&orderby={{ orderby }}&updw={{ updw }}">{{ datas.next_page_number }}</a></li>
+                        <li><a href="/go_mission/list/?page={{ datas.paginator.num_pages }}&orderby={{ orderby }}&updw={{ updw }}">&raquo;</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modal1" class="modal fade">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p>是否确认失效?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button id="offline_comfirm" type="button" class="btn btn-success">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modal2" class="modal fade">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p>是否确认完成?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button id="online_comfirm" type="button" class="btn btn-success">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</script>
+{% endblock %}
+
+
+{% block page_javascript %}
+<script>
+
+    $(".table").on('click', '.btn-online', function() {
+        $("#modal2").modal('show');
+        localStorage.setItem("convert_gid", $(this).data('gid'));
+        return false;
+    });
+
+    $("#online_comfirm").click(function() {
+        var gid = parseInt(localStorage.getItem("convert_gid"));
+
+        $.get("/go_mission/list/online/?gid="+ gid, function(data) {
+            $("#modal2").modal('hide');
+            alert('任务完成!');
+        location.reload();
+        });
+    });
+
+    $(".table").on('click', '.btn-offline', function() {
+        $("#modal1").modal('show');
+        localStorage.setItem("convert_gid", $(this).data('gid'));
+        return false;
+    });
+
+    $("#offline_comfirm").click(function() {
+        var gid = parseInt(localStorage.getItem("convert_gid"));
+
+        $.get("/go_mission/list/offline/?gid="+ gid, function(data) {
+            $("#modal1").modal('hide');
+            alert('任务失效!');
+        location.reload();
+        });
+    });
+</script>
+{% endblock %}
+
+

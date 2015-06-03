@@ -1,0 +1,227 @@
+{% extends "templates/layouts/default.html" %}
+
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block window %}
+<div id="chart"><!-- 图表 --></div>
+{% endblock %}
+
+{% block content %}
+
+<!-- 数据表格 -->
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">兑换码搜索结果：{{ total}}个</h3>
+                <div class="box-tools">
+                    <button class="btn btn-primary pull-right" id="search">搜索</button>
+                </div>
+            </div>
+            <div class="box-body">
+                <table class="table table-striped table-bordered mt24">
+                    <caption></caption>
+                    <thead>
+                        <tr>
+                            <th>type_id</th>
+                            <th>goods_id</th>
+                            <th>商品标题</th>
+                            <th>使用状态</th>
+                            <th>进货价</th>
+                            <th>售出价</th>
+                            <!--
+                            <th>type_id</th>
+                            <th>兑换卡名</th>
+                            -->
+                            <th>兑换码</th>
+                            <th>密码</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for d in datas %}
+                        <tr>
+                            <td>{{ d.type_id }}</td>
+                            <td>{{ d.goods_id }}</td>
+                            <td>{{ d.title }}</td>
+                            <td>
+                                {% if d.status == 1 %}
+                                    <span class="label label-danger">已使用</span>
+                                {% else %}
+                                    <span class="label label-success">未使用</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ d.inprice }}</td>
+                            <td>{{ d.outprice }}</td>
+
+                            <td class="tar">{{ d.num }}</td>
+                            <td>{{ d.pwd }}</td>
+                            <td>
+                                <a href="/converts/codedetail/delete/?gid={{ d.id }}" class="l btn-delete" data-gid="{{ d.id }}">删除</a>
+                                <a href="/converts/codedetail/used/?gid={{ d.id }}" class="l btn-used" data-gid="{{ d.id }}">/已使用</a>
+                                <a href="/converts/codedetail/unused/?gid={{ d.id }}" class="l btn-unused" data-gid="{{ d.id }}">/未使用</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modal" class="modal fade">
+    <form class="modal-dialog modal-sm form-horizontal" action="/converts/codesearch/" method="get">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title text-center">搜索</h4>
+            </div>
+            <div class="modal-body">
+                <p>温馨提示：只需输入其中一项即可查找。</p>
+                <div class="form-group">
+                    <label for="type_id" class="col-sm-2 control-label">type_id</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="type_id" placeholder="请输入type_id">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="goods_id" class="col-sm-2 control-label">goods_id</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="goods_id" placeholder="请输入goods_id">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="num" class="col-sm-2 control-label">num</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="num" placeholder="请输入兑换码">
+                    </div>
+                </div>
+                 <div class="form-group">
+                    <label for="code" class="col-sm-2 control-label">pwd</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" name="pwd" placeholder="请输入密码">
+                    </div>
+                </div>
+           </div>
+            <div class="modal-footer">
+                <button type="reset" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="submit" class="btn btn-success">确定</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div id="modal2" class="modal fade">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p>是否确认删除商品？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button id="delete_comfirm" type="button" class="btn btn-success">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modal4" class="modal fade">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p>是否修改状态已使用？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button id="used_comfirm" type="button" class="btn btn-success">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modal5" class="modal fade">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p>是否修改状态未使用？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button id="unused_comfirm" type="button" class="btn btn-success">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block page_javascript %}
+<script>
+    // 搜索
+
+    $("#search").click(function() {
+        $("#modal").modal('show');
+    });
+
+
+
+    $(".table").on('click', '.btn-delete', function() {
+        $("#modal2").modal('show');
+        localStorage.setItem("convert_gid", $(this).data('gid'));
+        return false;
+    });
+
+    $("#delete_comfirm").click(function() {
+        var gid = parseInt(localStorage.getItem("convert_gid"));
+
+        $.get("/converts/codedetail/delete/?gid="+ gid, function(data) {
+            $("#modal2").modal('hide');
+            alert('删除商品成功!');
+	    location.reload()
+        });
+    });
+    $(".table").on('click', '.btn-used', function() {
+        $("#modal4").modal('show');
+        localStorage.setItem("convert_gid", $(this).data('gid'));
+        return false;
+    });
+
+    $("#used_comfirm").click(function() {
+        var gid = parseInt(localStorage.getItem("convert_gid"));
+
+        $.get("/converts/codedetail/used/?gid="+ gid, function(data) {
+            $("#modal4").modal('hide');
+            alert('修改状态已使用成功!');
+	    location.reload()
+        });
+    });
+
+    $(".table").on('click', '.btn-unused', function() {
+        $("#modal5").modal('show');
+        localStorage.setItem("convert_gid", $(this).data('gid'));
+        return false;
+    });
+
+    $("#unused_comfirm").click(function() {
+        var gid = parseInt(localStorage.getItem("convert_gid"));
+
+        $.get("/converts/codedetail/unused/?gid="+ gid, function(data) {
+            $("#modal5").modal('hide');
+            alert('修改状态未使用成功!');
+	    location.reload()
+        });
+    });
+</script>
+{% endblock %}

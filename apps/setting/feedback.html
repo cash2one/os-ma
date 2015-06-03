@@ -1,0 +1,151 @@
+{% extends "templates/layouts/default.html" %}
+
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block window %}
+<div id="chart"><!-- 图表 --></div>
+{% endblock %}
+
+{% block content %}
+
+<!-- 数据表格 -->
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">反馈信息列表</h3>
+                <div class="box-tools">
+                    <div class="btn-group pull-right">
+                        <!--<button class="btn btn-success" id="orderby">排序</button>-->
+
+                    </div>
+                </div>
+            </div>
+            <div class="box-body">
+                <table class="table table-striped table-bordered mt24">
+                    <caption></caption>
+                    <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>user</th>
+                            <th>appType</th>
+                            <th>反馈内容</th>
+                            <th>邮箱</th>
+                            <th>时间</th>
+                            <th>scopeid</th>
+                            <th>处理状态</th>
+                            <th>操作</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for d in datas.object_list %}
+                        <tr>
+
+                            <td>{{ d.id }}</td>
+                            <td>{{ d.user }}</td>
+                            <td>
+                                {% if d.appType == 1 %}
+                                    <span class="label label-success">卡卡赚</span>
+                                {% else %}
+                                    <span class="label label-danger">免费红利</span>
+                                {% endif %}
+                            </td>
+
+                            <td>{{ d.content }}</td>
+                            <td>{{ d.mail }}</td>
+                            <td>{{ d.time }}</td>
+                            <td><a href="/users/search/?scopeid={{ d.scopeid }}">{{ d.scopeid }}</td>
+                            <td>
+                                {% if d.status == 1 %}
+                                    <span class="label label-success">已处理</span>
+                                {% else %}
+                                    <span class="label label-danger">未处理</span>
+                                {% endif %}
+                            </td>
+			    <td>
+
+                                <a href="/setting/feedback/deal/?gid={{ d.id }}" class="l btn-delete" data-gid="{{ d.id }}">处理</a>
+
+                <!--<div class="col-md-6">
+                    <label for="open">
+                        <input type="radio" id="open" name="status" onclick="doSm(1);" value=1 {% if d.status %}checked{% endif %}>
+                         已处理
+                        </label>
+                    <label for="close">
+                        <input type="radio" id="close" name="status" onclick="doSm(0);" value=0 {% if not d.status %}checked{% endif %}>
+                         未处理
+                    </label>
+            <input type="hidden" name="id" value="{{ d.id }}" />
+                    <button type="submit" class="btn btn-info">确认</button>
+
+                </div>-->
+		   	    </td>
+
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <ul class="pagination mt12">
+                    {% if datas.has_previous %}
+                    <li><a href="/setting/feedback/?page=1&orderby={{ orderby }}&updw={{ updw }}">&laquo;</a></li>
+                        <li><a href="/setting/feedback/?page={{ datas.previous_page_number }}&orderby={{ orderby }}&updw={{ updw }}">{{ datas.previous_page_number }}</a></li>
+                    {% endif %}
+                    <li class="active"><a href="">{{ datas.number}}</a></li>
+                    {% if datas.has_next %}
+                        <li><a href="/setting/feedback/?page={{ datas.next_page_number }}&orderby={{ orderby }}&updw={{ updw }}">{{ datas.next_page_number }}</a></li>
+                        <li><a href="/setting/feedback/?page={{ datas.paginator.num_pages }}&orderby={{ orderby }}&updw={{ updw }}">&raquo;</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modal2" class="modal fade">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">温馨提示</h4>
+            </div>
+            <div class="modal-body">
+                <p>是否确认处理过？</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button id="delete_comfirm" type="button" class="btn btn-success">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</script>
+{% endblock %}
+
+
+{% block page_javascript %}
+<script>
+
+    $(".table").on('click', '.btn-delete', function() {
+        $("#modal2").modal('show');
+        localStorage.setItem("convert_gid", $(this).data('gid'));
+        return false;
+    });
+
+    $("#delete_comfirm").click(function() {
+        var gid = parseInt(localStorage.getItem("convert_gid"));
+
+        $.get("/setting/feedback/deal/?gid="+ gid, function(data) {
+            $("#modal2").modal('hide');
+            alert('处理成功!');
+        location.reload();
+        });
+    });
+
+</script>
+{% endblock %}
+
+

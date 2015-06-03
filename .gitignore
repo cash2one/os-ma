@@ -1,0 +1,6 @@
+*.[a|o]
+*~
+*.bak
+*.swp
+*.pyc
+settings.py

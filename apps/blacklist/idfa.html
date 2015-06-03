@@ -1,0 +1,68 @@
+{% extends "templates/layouts/default.html" %}
+
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block window %}
+<div id="chart"><!-- 图表 --></div>
+{% endblock %}
+
+{% block content %}
+
+<!-- 数据表格 -->
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">imei黑名单列表</h3>
+                <div class="box-tools">
+                    <div class="btn-group pull-right">
+                        <button class="btn btn-danger" id="search">搜索</button>
+                    </div>
+                </div>
+            </div>
+            <div class="box-body">
+                <table class="table table-striped table-bordered mt24">
+                    <caption></caption>
+                    <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>idfa</th>
+                            <th>是否黑名单</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for d in datas.object_list %}
+                        <tr>
+                            <td>{{ d.id }}</td>
+                            <td>{{ d.idfa }}</a>
+                            </td>
+                            <td>
+                                {% if d.status == 1 %}
+                                    <span class="label label-danger">是</span>
+                                {% else %}
+                                    <span class="label label-success">否</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <ul class="pagination mt12">
+                    {% if datas.has_previous %}
+                    <li><a href="/users/?page=1&orderby={{ orderby }}&updw={{ updw }}">&laquo;</a></li>
+                        <li><a href="/users/?page={{ datas.previous_page_number }}&orderby={{ orderby }}&updw={{ updw }}">{{ datas.previous_page_number }}</a></li>
+                    {% endif %}
+                    <li class="active"><a href="">{{ datas.number}}</a></li>
+                    {% if datas.has_next %}
+                        <li><a href="/users/?page={{ datas.next_page_number }}&orderby={{ orderby }}&updw={{ updw }}">{{ datas.next_page_number }}</a></li>
+                        <li><a href="/users/?page={{ datas.paginator.num_pages }}&orderby={{ orderby }}&updw={{ updw }}">&raquo;</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+

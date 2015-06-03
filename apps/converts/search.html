@@ -1,0 +1,63 @@
+{% extends "templates/layouts/default.html" %}
+
+{% block style %}
+.cuttext{
+    display: block;
+    width: 60px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    border: 1px solid transparent;
+}
+{% endblock %}
+
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block window %}
+<div id="chart"><!-- 图表 --></div>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+    </div>
+</div>
+
+<!-- 数据表格 -->
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">兑换订单搜索结果：{{ total }}单 成本：{{cost}}</h3>
+                <div class="box-tools">
+                    <div class="pull-right">
+                        <a class="btn btn-danger" id="search">重新搜索</a>
+                        {% if total %}
+                            <a href="/converts/search/?{{ query }}export=1" class="btn btn-success">导出结果</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="box-body">
+                {% include 'converts/index_body.html' %}
+                <ul class="pagination mt12">
+                    {% if datas.has_previous %}
+                        <li><a href="/converts/search/?{{ query }}page=1">&laquo;</a></li>
+                        <li><a href="/converts/search/?{{ query  }}page={{ datas.previous_page_number }}">{{ datas.previous_page_number }}</a></li>
+                    {% endif %}
+                    <li class="active"><a href="">{{ datas.number }}</a></li>
+                    {% if datas.has_next %}
+                        <li><a href="/converts/search/?{{ query }}page={{ datas.next_page_number }}">{{ datas.next_page_number }}</a></li>
+                        <li><a href="/converts/search/?{{ query }}page={{ datas.paginator.num_pages }}">&raquo;</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'converts/modal.html' %}
+{% endblock %}
+
+{% block page_javascript %}
+{% include 'converts/converts_script.html' %}
+{% endblock %}

@@ -1,0 +1,176 @@
+{% extends "templates/layouts/default.html" %}
+
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="col-md-8 col-md-offset-2">
+
+        <form class="form-horizontal mt24" action="." method="post">
+            {% if succ %}
+                <div class="alert alert-success alert-dimissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    恭喜小伙伴，修改收入成功！
+                </div>
+            {% endif %}
+
+            {% if errors %}
+                <div class="alert alert-danger alert-dimissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <ul>
+                        {% for error in errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            <input type="hidden" name="id" value="{{ datas.id }}" />
+
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="id">id：</label>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" value="{{ datas.id }}" name="id" readonly="readonly"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="day">日期：</label>
+                <div class="col-md-2">
+                    <input type="text" class="form-control" value="{{ datas.day }}" name="day" readonly="readonly" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="dollar">美元汇率：</label>
+                <div class="col-md-2">
+                    <input type="text" align="left" class="form-control" value="{{ datas.dollar }}" name="dollar" placeholder="请输入今日美元汇率" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="youmi">youmi：</label>
+                <div class="col-md-2">
+                    <input type="text" align="left" class="form-control" value="{{ datas.youmi }}" name="youmi" placeholder="请输入有米收入" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="youmi">adxmi：</label>
+                <div class="col-md-2">
+                    <input type="text" align="left" class="form-control" value="{{ datas.adxmi }}" name="adxmi" placeholder="请输入有米收入" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="vungle">vungle：</label>
+                <div class="col-md-2">
+                    <input type="text" align="left" class="form-control" value="{{ datas.vungle }}" name="vungle" placeholder="请输入vungle收入" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="supersonic">supersonic：</label>
+                <div class="col-md-2">
+                    <input type="text" class="form-control" value="{{ datas.supersonic }}" name="supersonic" placeholder="请输入supersonic收入" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="aarki">aarki：</label>
+                <div class="col-md-2">
+                    <input type="text" align="left" class="form-control" value="{{ datas.aarki }}" name="aarki" placeholder="请输入aarki收入" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="adcolony">adcolony : </label>
+                <div class="col-md-2">
+                    <input type="text" align="left" class="form-control" value="{{ datas.adcolony }}" name="adcolony" placeholder="请输入adcolony收入" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="trialpay">trialpay：</label>
+                <div class="col-md-2">
+                    <input type="text" class="form-control" value="{{ datas.trialpay }}" name="trialpay" placeholder="请输入trialpay收入" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="fyber">fyber：</label>
+                <div class="col-md-2">
+                    <input type="text" align="left" class="form-control" value="{{ datas.fyber }}" name="fyber" placeholder="请输入fyber收入" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="metaps">metaps：</label>
+                <div class="col-md-2">
+                    <input type="text" align="left" class="form-control" value="{{ datas.metaps }}" name="metaps" placeholder="请输入metaps收入" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="appdriver">appdriver：</label>
+                <div class="col-md-2">
+                    <input type="text" align="left" class="form-control" value="{{ datas.appdriver }}" name="appdriver" placeholder="请输入appdriver收入" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="admob">admob：</label>
+                <div class="col-md-2">
+                    <input type="text" align="left" class="form-control" value="{{ datas.admob }}" name="admob" placeholder="请输入admob收入" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="duomeng">duomeng：</label>
+                <div class="col-md-2">
+                    <input type="text" align="left" class="form-control" value="{{ datas.duomeng }}" name="duomeng" placeholder="请输入duomeng收入" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="duomeng">woobi：</label>
+                <div class="col-md-2">
+                    <input type="text" align="left" class="form-control" value="{{ datas.woobi }}" name="woobi" placeholder="请输入woobi收入" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="duomeng">airpush：</label>
+                <div class="col-md-2">
+                    <input type="text" align="left" class="form-control" value="{{ datas.airpush }}" name="airpush" placeholder="请输入airpush收入" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="personaly">personaly：</label>
+                <div class="col-md-2">
+                    <input type="text" align="left" class="form-control" value="{{ datas.personaly }}" name="personaly" placeholder="请输入personaly收入" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="dincome">美元全天收入：</label>
+                <div class="col-md-2">
+                    <input type="text" align="left" class="form-control" value="{{ datas.dincome }}" name="dincome" placeholder="请输入美元全天收入" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="rincome">人民币收入：</label>
+                <div class="col-md-2">
+                    <input type="text" align="left" class="form-control" value="{{ datas.rincome }}" name="rincome" placeholder="请输入人民币收入" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="cost">成本：</label>
+                <div class="col-md-2">
+                    <input type="text" align="left" class="form-control" value="{{ datas.cost }}" name="cost" placeholder="请输入成本/元" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="gprofit">毛利：</label>
+                <div class="col-md-2">
+                    <input type="text" align="left" class="form-control" value="{{ datas.gprofit }}" name="gprofit" placeholder="请输入毛利/元" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="gmargin">毛利率：</label>
+                <div class="col-md-2">
+                    <input type="text" align="left" class="form-control" value="{{ datas.gmargin }}" name="gmargin" placeholder="请输入毛利率" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <button type="submit" class="btn btn-info">确认修改</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,189 @@
+<script>
+
+
+    // 添加备注
+    $(".notes").blur(function(){
+        var c = '';
+        var id = $(this).data("id");
+        if ($(this).val() == "") {
+            $(this).attr('title', '添加');
+            $(this).attr('placeholder', '添加');
+            submit(id, c);
+        }else{
+            c = $(this).val();
+            $(this).attr('title', c);
+            $(this).attr('placeholder', c);
+            submit(id, c);
+        }
+    });
+    function submit(id, c)
+    {
+        $.get("/converts/add_notes/", 
+            {id: id, notes: c},
+            function(data){
+                if (data.c){
+                    alert("内部错误！");
+                }
+            });
+    }
+     // 添加兑换码
+    $(".pwd").blur(function(){
+        var c = '';
+        var id = $(this).data("id");
+        if ($(this).val() == "") {
+            $(this).attr('title', '添加');
+            $(this).attr('placeholder', '添加');
+            submit_pwd(id, c);
+        }else{
+            c = $(this).val();
+            $(this).attr('title', c);
+            $(this).attr('placeholder', c);
+            submit_pwd(id, c);
+        }
+    });
+    function submit_pwd(id, c)
+    {
+        $.get("/converts/add_pwd/", 
+            {id: id, pwd: c},
+            function(data){
+                if (data.c){
+                    alert(data.errors);
+                }
+            });
+    }
+   
+    // 添加兑换码
+    $(".num").blur(function(){
+        var c = '';
+        var id = $(this).data("id");
+        if ($(this).val() == "") {
+            $(this).attr('title', '添加');
+            $(this).attr('placeholder', '添加');
+            submit_num(id, c);
+        }else{
+            c = $(this).val();
+            $(this).attr('title', c);
+            $(this).attr('placeholder', c);
+            submit_num(id, c);
+        }
+    });
+    function submit_num(id, c)
+    {
+        $.get("/converts/add_num/", 
+            {id: id, num: c},
+            function(data){
+                if (data.c){
+                    alert(data.errors);
+                }
+            });
+    }
+
+    // 搜索
+    $("#search").click(function() {
+        $("#modal_search").modal('show');
+    });
+
+    // 刷新页面
+    $("#btn-refresh").click(function(){
+        location.reload();
+    });
+
+    // 全选
+    $("#btn-all").click(function(){
+        $("table input[type='radio']").each(function(){
+            $(this).attr("checked", false);
+            $(this).closest(".iradio_minimal").removeClass("checked");
+        });
+        $("input[type='radio'][class='accept']").each(function(){
+            $(this).attr("checked", true);
+            $(this).closest(".iradio_minimal").addClass("checked");
+        });
+    });
+    // 全不选 FIXME
+    $("#btn-allnot").click(function(){
+        $("table input[type='radio']").each(function(){
+            $(this).attr("checked", false);
+            $(this).closest(".iradio_minimal").removeClass("checked");
+        });
+    });
+
+
+    // 兑换允许
+    $(".btn-submit").click(function(){
+        var checked = 0;
+        $("table input[type='radio']:checked").each(function(){
+            checked = 1;
+        });
+        $("input[type='radio'][class='accept'][checked='checked']").each(function(){
+            checked = 1;
+        });
+        if( checked ){
+            $("#modal").modal('show');
+        }else{
+            alert("请先选择!");
+        }
+    });
+
+    $("#convert_accept").click(function() {
+        var accept = '';
+        var wait = '';
+        var ignore = '';
+        var delay = '';
+        $("input[type='radio'][class='accept']:checked").each(function(){
+            accept += $(this).data('id') + ',' ;
+        });
+        $("input[type='radio'][class='wait']:checked").each(function(){
+            wait += $(this).data('id') + ',' ;
+        });
+        $("input[type='radio'][class='ignore']:checked").each(function(){
+            ignore += $(this).data('id') + ',' ;
+        });
+        $("input[type='radio'][class='delay']:checked").each(function(){
+            delay += $(this).data('id') + ',' ;
+        });
+        // 多次全选/全不选后BUG FIXME
+        $("input[type='radio'][class='accept'][checked='checked']").each(function(){
+            accept += $(this).data('id') + ',' ;
+        });
+        $.ajax({
+            url:"/converts/accept_convert/",
+            async: false,
+            type: "POST",
+            data: {
+                accept: accept,
+                wait: wait,
+                ignore: ignore,
+                delay: delay
+            },
+            dataType: "json",
+            error: function(){
+                alert('系统繁忙');
+            },
+            success: function(data) {
+                var id;
+                for(var i=0; i<data.length; i++){
+                    id = data[i].id;
+                    status = data[i].status;
+                    if (status==0){
+                        var span = '<span class="label label-primary">等待审核</span>';
+                    }else if (status==1){
+                        var span = '<span class="label label-success">兑换成功</span>';
+                    }else if(status==2){
+                        var span = '<span class="label label-danger">忽略兑换</span>';
+                    }else if(status==3){
+                        var span = '<span class="label label-warning">延缓兑换</span>';
+                    }else if(status==4){
+                        var span = '<span class="label label-warning">请录入兑换码</span>';
+                    }else if(status==5){
+                        var span = '<span class="label label-danger">黑名单请注意</span>';
+                    }else{
+                        var span = '<span class="label label-info">兑换失败</span>';
+                    }
+                    $("#accept_"+ id).html(span);
+                }
+                $("#modal").modal('hide');
+            }
+        });
+        return false;
+    });
+</script>

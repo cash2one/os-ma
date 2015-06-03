@@ -1,0 +1,104 @@
+{% extends "templates/layouts/default.html" %}
+
+{% block page_title %}{{ title }}{% endblock %}
+{% block page_id %}converts-types{% endblock %}
+{% block username %}{{ username }}{% endblock %}
+{% block window_class %}window-orange{% endblock %}
+
+{% block window %}
+<div id="chart"><!-- 图表 --></div>
+{% endblock %}
+
+{% block content %}
+    <h3 class="mt36"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;推广应用</h3>
+
+	
+	{% if succ %}
+        <div class="alert alert-success alert-dimissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            恭喜小伙伴，推广应用完成！
+        </div>
+    {% endif %}
+
+    {% if errors %}
+        <div class="alert alert-danger alert-dimissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <ul>
+                {% for error in errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}	
+	
+    <form class="form-horizontal mt24" action="." method="post" enctype="multipart/form-data">{% csrf_token %}
+        <div class="form-group">
+            <label class="col-md-2 control-label" for="popularizeIcon">应用图标：</label>
+            <div class="col-md-6">
+                <input type="file" name="popularizeIcon" id="popularizeIcon" />
+            </div>
+        </div>
+        
+        <div class="form-group formtitle">
+            <label class="col-md-2 control-label" for="pushTitle">应用标题：</label>
+            <div class="col-md-6">
+                <input type="text" class="form-control" name="pushTitle" id="pushTitle" placeholder="请输入应用标题" />
+            </div>
+        </div>
+        <div class="form-group formcontent">
+            <label class="col-md-2 control-label" for="pushContent">推荐语：</label>
+            <div class="col-md-6">
+                <input type="text" class="form-control" name="pushContent" id="pushContent" placeholder="请输入应用推荐语" />
+            </div>
+        </div>
+
+        <div class="form-group formaddress">
+            <label class="col-md-2 control-label" for="pname">应用包名：</label>
+            <div class="col-md-6">
+                <input type="text" class="form-control" name="pname" id="pname" placeholder="请输入应用包名" />
+            </div>
+        </div>
+        <div class="form-group formaddress">
+            <label class="col-md-2 control-label" for="url">下载地址：</label>
+            <div class="col-md-6">
+                <input type="text" class="form-control" name="url" id="url" placeholder="请输入应用下载地址" />
+            </div>
+        </div>
+             <div class="form-group">
+                <label class="col-md-2 control-label">是否开启推广：</label>
+                <div class="col-md-6">
+                    <label for="close">
+                        <input type="radio" id="close" name="Apush" value=0 checked>
+                         否
+                    </label>
+                    <label for="open">
+                        <input type="radio" id="open" name="Apush" value=1 checked>
+                         是
+                    </label>
+                </div>
+            </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" class="btn btn-info">发布</button>
+            </div>
+        </div>
+	</form>
+</div>
+{% endblock %}
+{% block page_javascript %}
+<script>
+$(function($) {
+    $('select').change(function() {
+        if ($('option:checked').val() == 1) {
+            $('.formcontent, .formaddress, .formtitle').show()
+        }
+        if ($('option:checked').val() == 2) {
+            $('.formcontent, .formtitle').show()
+            $('.formaddress').hide()
+        }
+    })
+})
+</script>
+{% endblock %}
+
+

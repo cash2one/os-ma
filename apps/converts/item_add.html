@@ -1,0 +1,86 @@
+{% extends "templates/layouts/default.html" %}
+
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="col-md-8 col-md-offset-2">
+
+        <form class="form-horizontal mt24" action="." method="post">
+            {% if succ %}
+                <div class="alert alert-success alert-dimissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    恭喜小伙伴，创建兑换商品成功！
+                </div>
+            {% endif %}
+
+            {% if errors %}
+                <div class="alert alert-danger alert-dimissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <ul>
+                        {% for error in errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="exchangeType">兑换类型：</label>
+                <div class="col-md-10">
+                    <!-- 修改样式 -->
+                    <select name="exchangeType" >
+                    	{% for d in datas %}
+                    	<option value="{{ d.id }}">{{ d.title }}</option>
+                    	{% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="exchangeName">商品名称：</label>
+                <div class="col-md-6">
+                    <input type="text" class="form-control" value="{{ temps.exchange_name }}" name="exchangeName" id="exchangeName" placeholder="请输入商品名称" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="exchangeDesc">商品描述：</label>
+                <div class="col-md-6">
+                    <input type="text" class="form-control" value="{{ temps.exchange_desc }}" name="exchangeDesc" id="exchangeDesc" placeholder="请描述商品兑换" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="exchangeCost">商品价格：</label>
+                <div class="col-md-3">
+                    <input type="number" class="form-control" value="{{ temps.exchange_cost|default:0 }}" name="exchangeCost" id="exchangeCost" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="exchangeCostPoints">消耗积分：</label>
+                <div class="col-md-3">
+                    <input type="number" class="form-control" value="{{ temps.exchange_point|default:100 }}" name="exchangePoint" id="exchangePoint" />
+                    <!-- <p id="cost_point" class="form-control-static">自动计算</p>-->
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <button type="submit" class="btn btn-info">添加商品</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block page_javascript %}
+<script>
+    $("#exchangeCost").on('blur', function() {
+        var value = parseInt(this.value);
+        if (value) $("#cost_point").html( value * 100 );
+    });
+</script>
+{% endblock %}

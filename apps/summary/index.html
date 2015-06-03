@@ -1,0 +1,159 @@
+{% extends "templates/layouts/default.html" %}
+
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block content %}
+<!-- summary data -->
+<div class="row">
+    <!-- new user -->
+    <div class="col-lg-3 col-xs-6">
+        <div class="small-box bg-green">
+            <div class="inner">
+                <h3>{{ today_total_points }}</h3>
+                <p>今日积分总数
+                <small>来自于 {{ today_callback_orders }} 个任务，平均 {{ per_order_points }}</small></p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-stats-bars"></i>
+            </div>
+            <a class="small-box-footer" href="/earns/">
+                More info
+                <i class="fa fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
+    <!-- total user -->
+    <div class="col-lg-3 col-xs-6">
+        <div class="small-box bg-aqua">
+            <div class="inner">
+                <h3>{{ total_user }}</h3>
+                <p>总用户数
+                <small>今日新增 {{ new_user }} ，其中广告带来 {{ new_user_fromad }}</small></p>
+                </p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-person"></i>
+            </div>
+            <a class="small-box-footer" href="/users/">
+                More info
+                <i class="fa fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
+    <!-- new user -->
+    <div class="col-lg-3 col-xs-6">
+        <div class="small-box bg-yellow">
+            <div class="inner">
+                <h3>{{ new_user }}</h3>
+                <p>今日新增用户数</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-person-add"></i>
+            </div>
+            <a class="small-box-footer" href="/users/">
+                More info
+                <i class="fa fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>
+    <!-- ad user -->
+    <!--<div class="col-lg-3 col-xs-6">
+        <div class="small-box bg-red">
+            <div class="inner">
+                <h3>{{ new_user_ios }}</h3>
+                <p>今日ios用户数</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-pie-graph"></i>
+            </div>
+            <a class="small-box-footer" href="/users/">
+                More info
+                <i class="fa fa-arrow-circle-right"></i>
+            </a>
+        </div>
+    </div>-->
+</div>
+<!-- main chart -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title">新用户</h3>
+            </div>
+            <div class="box-body chart-responsive">
+                <div class="chart" id="newuser-chart" style="height: 300px;"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <!-- points stats -->
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title">积分获取情况</h3>
+            </div>
+            <div class="box-body chart-responsive">
+                <div class="chart" id="points-stats-chart" style="height: 300px;"></div>
+            </div>
+        </div>
+        <!-- tasks stats -->
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title">任务完成情况</h3>
+            </div>
+            <div class="box-body chart-responsive">
+                <div class="chart" id="tasks-stats-chart" style="height: 300px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block page_javascript %}
+<script type="text/javascript" charset="utf-8">
+   $(function() {
+        "use strict";
+
+        // New User
+        var user_user_chart = new Morris.Line({
+            element: 'newuser-chart',
+            resize: true,
+            data: [ {% for d, count in user_stats.items %}
+                {y: '{{ d|date:"Y-m-d" }}', item1: {{ count.aos }}, item2: {{ count.ios }}, item3: {{ count.kaka }}},{% endfor %}
+            ],
+            xkey: 'y',
+            ykeys: ['item1', 'item2', 'item3'],
+            labels: ['新增红利aos用户数', '新增红利ios用户数', '新增kaka赚用户数'],
+            lineColors: ['#3c8dbc', '#a0d0e0', '#00FF66'],
+            hideHover: 'auto'
+        });
+
+        // 积分获取情况
+        var points_stats_area = new Morris.Line({
+            element: 'points-stats-chart',
+            resize: true,
+            data: [ {% for d, count in points_stats.items %}
+                {y: '{{ d|date:"Y-m-d" }}', item1: {{ count.aos }}, item2: {{ count.ios }}, item3: {{ count.kaka }}},{% endfor %}
+            ],
+            xkey: 'y',
+            ykeys: ['item1', 'item2', 'item3'],
+            labels: ['红利aos积分获取数', '红利ios积分获取数', '卡卡赚积分获取数'],
+            lineColors: ['#3c8dbc', '#a0d0e0', '#00FF66'],
+            hideHover: 'auto'
+        });
+
+        // 任务获取情况
+        var tasks_stats_line = new Morris.Line({
+            element: 'tasks-stats-chart',
+            resize: true,
+            data: [ {% for d, count in tasks_stats.items %}
+            {y: '{{ d|date:"Y-m-d" }}', item1: {{ count.aos }}, item2: {{ count.ios }}, item3: {{ count.kaka}}},{% endfor %}
+            ],
+            xkey: 'y',
+            ykeys: ['item1', 'item2', 'item3'],
+            labels: ['aos任务完成数', 'ios任务完成数', '卡卡赚任务完成数'],
+            lineColors: ['#3c8dbc', '#a0d0e0', '#00FF66'],
+            hideHover: 'auto'
+        });
+   });
+</script>
+{% endblock %}

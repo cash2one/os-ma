@@ -1,0 +1,124 @@
+{% extends "templates/layouts/default.html" %}
+
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="col-md-8 col-md-offset-2">
+
+        <form class="form-horizontal mt24" action="." method="post">
+            {% if succ %}
+                <div class="alert alert-success alert-dimissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    恭喜小伙伴，编辑广告配置成功！
+                </div>
+            {% endif %}
+
+            {% if errors %}
+                <div class="alert alert-danger alert-dimissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <ul>
+                        {% for error in errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            <input type="hidden" name="ad_id" value="{{ datas.ad_id }}" />
+
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="ad_description">广告渠道：</label>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" value="{{ datas.description }}" name="description" id="ad_description" placeholder="请输入广告渠道名称" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="pname">屏蔽包名：</label>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" value="{{ datas.pname }}" name="pname" id="pname" placeholder="请输入屏蔽包名" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="ad_title">渠道别名：</label>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" value="{{ datas.title}}" name="title" id="ad_title" placeholder="请输入渠道别名" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="ad_intro">渠道简称：</label>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" value="{{ datas.intro }}" name="intro" id="ad_intro" placeholder="请输入渠道简称" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="ad_detail">详细介绍：</label>
+                <div class="col-md-8">
+                    <input type="text" class="form-control" value="{{ datas.detail }}" name="detail" id="ad_detail" placeholder="请输入广告详细介绍" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="ad_credits">积分数：</label>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" value="{{ datas.credits }}" name="credits" id="ad_credits" placeholder="请输入积分数" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="ad_exchangeRate">积分兑换比例：</label>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" value="{{ datas.exchangeRate }}" name="exchangeRate" id="ad_exchangeRate" placeholder="请输入兑换比例" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="ad_icon">图标颜色：</label>
+                <div class="col-md-6">
+                    <input type="text" class="form-control" value="{{ datas.icon }}" name="icon" id="ad_icon" placeholder="请输入图标颜色" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label">是否开启aos：</label>
+                <div class="col-md-6">
+                    <label for="open">
+                        <input type="radio" id="open" name="aos_status" value=1 {% if datas.aos_status %}checked{% endif %}>
+                         开启
+                        </label>
+                    <label for="close">
+                        <input type="radio" id="close" name="aos_status" value=0 {% if not datas.aos_status %}checked{% endif %}>
+                         关闭
+                    </label>
+                </div>
+            </div>
+             <div class="form-group">
+                <label class="col-md-2 control-label">是否开启ios：</label>
+                <div class="col-md-6">
+                    <label for="open">
+                        <input type="radio" id="open" name="ios_status" value=1 {% if datas.ios_status %}checked{% endif %}>
+                         开启
+                        </label>
+                    <label for="close">
+                        <input type="radio" id="close" name="ios_status" value=0 {% if not datas.ios_status %}checked{% endif %}>
+                         关闭
+                    </label>
+                </div>
+            </div>
+           <div class="form-group">
+                <label class="col-md-2 control-label" for="exchangeType">aos优先级：</label>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" value="{{ datas.priority }}" name="priority" id="ad_priority" placeholder="1最大，2次之，依此类推……" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="exchangeType">ios优先级：</label>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" value="{{ datas.iospriority }}" name="iospriority" id="ad_iospriority" placeholder="1最大，2次之，依此类推……" />
+                </div>
+            </div>
+           <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <button type="submit" class="btn btn-info">确认修改</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

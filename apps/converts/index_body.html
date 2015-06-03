@@ -1,0 +1,124 @@
+                <div class="pull-right">
+                    <div class="btn-group">
+                        <a class="btn btn-xs btn-default" id="btn-all">全选</a>
+                        <a class="btn btn-xs btn-default" id="btn-allnot">全不选</a>
+                        <a class="btn btn-xs btn-info" id="btn-refresh">刷新</a>
+                    </div>
+                    <a class="btn btn-ms btn-warning btn-submit">确定</a>
+                </div>
+                <FORM METHOD=GET ACTION="http://www.ip138.com:8080/search.asp" name="mobileform" target="_blank">
+                <tr><td align="center">手机号码所在地查询：<input type="text" name="mobile" size="16"> 
+                <input type="submit" value="查询"><INPUT TYPE="hidden" name="action" value="mobile">
+                </td></tr></FORM>
+                <table class="table table-striped table-bordered mt24">
+                    <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>UID</th>
+                            <th>appType</th>
+                            <th>怀疑作弊</th>
+                            <th>scopeid</th>
+                            <th>name</th>
+                            <!--<th>订单IP</th>
+                            <th>订单IP归属地</th>-->
+                            <th>兑换时间</th>
+                            <th>有效期</th>
+                            <th>商品</th>
+                            <th>数量</th>
+                            <th>进货价</th>
+                            <th>总价值</th>
+                            <th>消耗积分</th>
+                            <th>地址</th>
+                            <th><style="width:100% ">兑换码</th>
+                            <th>密码</th>
+                            <th>订单状态</th>
+                            <th class="text-center">
+                                <label>待审</label>
+                                <small>/</small>
+                                <label>兑换</label>
+                                <small>/</small>
+                                <label>忽略</label>
+                                <small>/</small>
+                                <label>延缓</label>
+                            </th>
+                            <th>兑吧</th>
+                            <th>备注</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for d in datas.object_list %}
+                        <tr>
+                            <td class="text-muted">{{ d.id }}</td>
+                            <td><a href="/users/detail/{{ d.uid }}/" class="l" data-uid="{{ d.uid }}">{{ d.uid }}</a></td>
+                            <td>
+                            {% ifequal d.appType 1 %}
+                                <span class="label label-success">卡卡赚</span>
+                            {% endifequal %}
+                            {% ifequal d.appType 0 %}
+                                <span class="label label-danger">免费红利</span>
+                            {% endifequal %}
+                            </td>
+                            <td>
+                            {% ifequal d.wonder 0 %}
+                                <span class="label label-success">否</span>
+                            {% endifequal %}
+                            {% ifequal d.wonder 1 %}
+                                <span class="label label-danger">是</span>
+                            {% endifequal %}
+                            </td>
+
+                            <td>{{ d.users.scopeid }}</td>
+                            <td>{{ d.users.name }}</td>
+                            <td class="g9">{{ d.create_time|date:"Y-m-d H:i:s" }}</td>
+                            <td class="g9">{{ d.end_date }}</td>
+                            <td>{{ d.goods_title }}</td>
+                            <td>{{ d.count }}</td>
+                            <td class="hl">￥{{ d.inprice }}</td>
+                            <td class="hl">￥{{ d.total_price }}</td>
+                            <td>{{ d.total_points }}</td>
+                            <td>{{ d.address }}</td>
+                            <td id="num-{{ d.id}}">
+                                <input type="text" class="num cuttext" style="width:100%" id="id-{{ d.id }}" data-id="{{ d.id }}" value="{% if d.num %}{{ d.num }}{% endif %}" title="{% if d.num %}{{ d.num }}{% else %}添加{% endif %}" placeholder="{% if d.num %}{{ d.num }}{% else %}添加{% endif %}" >
+                            </td>
+                             <td id="pwd-{{ d.id}}">
+                                <input type="text" class="pwd cuttext" style="width:100%" id="id-{{ d.id }}" data-id="{{ d.id }}" value="{% if d.pwd %}{{ d.pwd }}{% endif %}" title="{% if d.pwd %}{{ d.pwd }}{% else %}添加{% endif %}" placeholder="{% if d.pwd %}{{ d.pwd }}{% else %}添加{% endif %}" >
+                            </td>
+                           <td>
+                            {% ifequal d.status 0 %}
+                                <span class="label label-primary">等待审核</span>
+                            {% endifequal %}
+                            {% ifequal d.status 1 %}
+                                <span class="label label-success">兑换成功</span>
+                            {% endifequal %}
+                            {% ifequal d.status 2 %}
+                                <span class="label label-danger">忽略兑换</span>
+                            {% endifequal %}
+                            {% ifequal d.status 3 %}
+                                <span class="label label-warning">延缓兑换</span>
+                            {% endifequal %}
+                            </td>
+                            <td id="accept_{{ d.id }}" class="text-center">
+                                <input type="radio" name="status-{{ d.id }}" class="wait" id="wait-{{ d.id }}" value="0" data-id="{{ d.id }}" {% ifequal d.status 0 %}disabled{% endifequal %}>
+                                <small>/</small>
+                                <input type="radio" name="status-{{ d.id }}" class="accept" id="accept-{{ d.id }}" value="1" data-id="{{ d.id }}" {% ifequal d.status 1 %}disabled{% endifequal %}>
+                                <small>/</small>
+                                <input type="radio" name="status-{{ d.id }}" class="ignore" id="ignore-{{ d.id }}" value="2" data-id="{{ d.id }}" {% ifequal d.status 2 %}disabled{% endifequal %}>
+                                <small>/</small>
+                                <input type="radio" name="status-{{ d.id }}" class="delay" id="delay-{{ d.id }}" value="3" data-id="{{ d.id }}" {% ifequal d.status 3 %}disabled{% endifequal %}>
+                            </td>
+                            <td>
+                            {% ifequal d.duiba 0 %}
+                                <span class="label label-success">自家</span>
+                            {% endifequal %}
+                            {% ifequal d.duiba 1 %}
+                                <span class="label label-primary">兑吧</span>
+                            {% endifequal %}
+                            </td>
+                           <td id="notes-{{ d.id}}">
+                                <input type="text" class="notes cuttext" id="id-{{ d.id }}" data-id="{{ d.id }}" value="{% if d.notes %}{{ d.notes }}{% endif %}" title="{% if d.notes %}{{ d.notes }}{% else %}添加{% endif %}" placeholder="{% if d.notes %}{{ d.notes }}{% else %}添加{% endif %}" >
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+

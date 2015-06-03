@@ -1,0 +1,104 @@
+{% extends "templates/layouts/default.html" %}
+
+{% block page_title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="col-md-8 col-md-offset-2">
+
+        <form class="form-horizontal mt24" action="." method="post">
+            {% if succ %}
+                <div class="alert alert-success alert-dimissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    恭喜小伙伴，发放奖励成功！
+                </div>
+            {% endif %}
+
+            {% if errors %}
+                <div class="alert alert-danger alert-dimissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <ul>
+                        {% for error in errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            <input type="hidden" name="id" value="{{ datas.id }}" />
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="id">id：</label>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" value="{{ datas.id }}" name="id" readonly="readonly"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="uid">用户uid：</label>
+                <div class="col-md-2">
+                    <input type="text" class="form-control" value="{{ datas.uid }}" name="uid" placeholder="请输入用户uid" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="notes">notes：</label>
+                <div class="col-md-2">
+                    <input type="text" class="form-control" value="{{ datas.notes }}" name="notes" placeholder="请输入备注" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="appType">应用类型：</label>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" value="{{ datas.appType }}" name="appType" placeholder="0免费红利，1卡卡赚" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="goods_id">goods_id：</label>
+                <div class="col-md-2">
+                    <input type="text" class="form-control" value="{{ datas.goods_id }}" name="goods_id" readonly="readonly"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="type_id">type_id：</label>
+                <div class="col-md-2">
+                    <input type="text" class="form-control" value="{{ datas.type_id }}" name="type_id" readonly="readonly" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="inprice">inprice：</label>
+                <div class="col-md-2">
+                    <input type="text" class="form-control" value="{{ datas.inprice }}" name="inprice" readonly="readonly" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="outprice">outprice：</label>
+                <div class="col-md-2">
+                    <input type="text" class="form-control" value="{{ datas.outprice }}" name="outprice" readonly="readonly" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="title">title：</label>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" value="{{ datas.title }}" name="title" readonly="readonly" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="num">num：</label>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" value="{{ datas.num }}" name="num" readonly="readonly" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="pwd">pwd：</label>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" value="{{ datas.pwd }}" name="pwd" readonly="readonly" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <button type="submit" class="btn btn-info">确认修改</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "templates/layouts/default.html" %}
+
+{% block page_title %}{{ title }}{% endblock %}
+{% block page_id %}users-index{% endblock %}
+{% block username %}{{ username }}{% endblock %}
+{% block window_class %}window-red{% endblock %}
+
+{% block window %}
+<div id="chart"><!-- 图表 --></div>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h2 class="p0"><i class="glyphicon glyphicon-user"></i>&nbsp;&nbsp;<a href="/users/">用户</a>：{{ uid}}</h2>
+</div>
+
+<!-- 数据表格 -->
+<table class="table table-striped table-bordered mt24">
+    <caption>用户已兑换积分</caption>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <!--<th>订单IP</th>
+            <th>IP归属地</th>-->
+            <th>货物名称</th>
+            <th>货物积分</th>
+            <th>货物单价</th>
+            <th>兑换数量</th>
+            <th>消费积分</th>
+            <th>总价</th>
+            <th>审核状态</th>
+            <th>收获地址</th>
+            <th>备注</th>
+            <th>时间</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for d in datas %}
+        <tr>
+            <td>{{ forloop.counter}}</td>
+            <!--<td>{{ d.ip }}</td>
+            <td>{{ d.ip_address }}</td>-->
+            <td>{{ d.goods_title }}</td>
+            <td>{{ d.points }}</td>
+            <td>{{ d.price }}</td>
+            <td>{{ d.count }}</td>
+            <td>{{ d.total_points }}</td>
+            <td>{{ d.total_price }}</td>
+            <td>
+            {% ifequal d.status 0 %}
+                <span class="label label-primary">等待审核</span>
+            {% endifequal %}
+            {% ifequal d.status 1 %}
+                <span class="label label-success">兑换成功</span>
+            {% endifequal %}
+            {% ifequal d.status 2 %}
+                <span class="label label-danger">忽略兑换</span>
+            {% endifequal %}
+            {% ifequal d.status 3 %}
+                <span class="label label-warning">延缓兑换</span>
+            {% endifequal %}
+            </td>
+            <td>{{ d.address }}</td>
+            <td>{{ d.notes }}</td>
+            <td class="g9">{{ d.create_time|date:"Y-m-d H:i:s"}}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
+{% block page_javascript %}
+{% endblock %}

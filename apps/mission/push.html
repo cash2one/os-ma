@@ -1,0 +1,125 @@
+{% extends "templates/layouts/default.html" %}
+
+{% block page_title %}{{ title }}{% endblock %}
+{% block page_id %}converts-types{% endblock %}
+{% block username %}{{ username }}{% endblock %}
+{% block window_class %}window-orange{% endblock %}
+
+{% block window %}
+<div id="chart"><!-- 图表 --></div>
+{% endblock %}
+
+{% block content %}
+    <h3 class="mt36"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp;发布自有任务</h3>
+
+	
+	{% if succ %}
+        <div class="alert alert-success alert-dimissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            恭喜小伙伴，发布自有任务完成！
+        </div>
+    {% endif %}
+
+    {% if errors %}
+        <div class="alert alert-danger alert-dimissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <ul>
+                {% for error in errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}	
+	
+    <form class="form-horizontal mt24" action="." method="post" enctype="multipart/form-data">{% csrf_token %}
+        <div class="form-group formaddress">
+            <label class="col-md-2 control-label" for="icon">图标地址：</label>
+            <div class="col-md-6">
+                <input type="text" class="form-control" name="icon" id="icon" placeholder="请输入图标地址" />
+            </div>
+        </div>
+        <div class="form-group formaddress">
+            <label class="col-md-2 control-label" for="desc_url">说明图片地址：</label>
+            <div class="col-md-6">
+                <input type="text" class="form-control" name="desc_url" id="desc_url" placeholder="请输入说明图片地址" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label" for="title">标题：</label>
+            <div class="col-md-6">
+                <input type="text" name="title" id="title" placeholder="请输入标题"/>
+            </div>
+        </div>
+        <div class="form-group formtitle">
+            <label class="col-md-2 control-label" for="description">描述：</label>
+            <div class="col-md-6">
+                <textarea style="min-height: 500px; min-width: 500px;" name="description" id="description" placeholder="请输入描述"></textarea>
+            </div>
+        </div>
+        <div class="form-group formcontent">
+            <label class="col-md-2 control-label" for="limit">每日限量：</label>
+            <div class="col-md-6">
+                <input type="text" class="form-control" name="limit" id="limit" placeholder="请输入每日限量" />
+            </div>
+        </div>
+         <div class="form-group formcontent">
+            <label class="col-md-2 control-label" for="point">积分：</label>
+            <div class="col-md-6">
+                <input type="text" class="form-control" name="point" id="point" placeholder="请输入积分" />
+            </div>
+        </div>
+       <div class="form-group formcontent">
+            <label class="col-md-2 control-label" for="total">总任务数：</label>
+            <div class="col-md-6">
+                <input type="text" class="form-control" name="total" id="total" placeholder="请输入总任务数" />
+            </div>
+        </div>
+        <div class="form-group formaddress">
+            <label class="col-md-2 control-label" for="pname">是否限时：</label>
+            <div class="col-md-6">
+                <input type="text" class="form-control" name="time_limit" id="time_limit" placeholder="1是0否" />
+            </div>
+        </div>
+        <div class="form-group formaddress">
+            <label class="col-md-2 control-label" for="pname">是否限量：</label>
+            <div class="col-md-6">
+                <input type="text" class="form-control" name="number_limit" id="number_limit" placeholder="1是0否" />
+            </div>
+        </div>
+        <div class="form-group formaddress">
+            <label class="col-md-2 control-label" for="stime">开始时间：</label>
+            <div class="col-md-6">
+                <input type="date" class="form-control" name="stime" id="etime" placeholder="请输入开始时间" />
+            </div>
+        </div>
+        <div class="form-group formaddress">
+            <label class="col-md-2 control-label" for="edate">结束时间：</label>
+            <div class="col-md-6">
+                <input type="date" class="form-control" name="edate" id="edate" placeholder="请输入结束时间" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" class="btn btn-info">发布</button>
+            </div>
+        </div>
+	</form>
+</div>
+{% endblock %}
+{% block page_javascript %}
+<script>
+$(function($) {
+    $('select').change(function() {
+        if ($('option:checked').val() == 1) {
+            $('.formcontent, .formaddress, .formtitle').show()
+        }
+        if ($('option:checked').val() == 2) {
+            $('.formcontent, .formtitle').show()
+            $('.formaddress').hide()
+        }
+    })
+})
+</script>
+{% endblock %}
+
+
